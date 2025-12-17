@@ -1,0 +1,1866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Management System - Enterprise Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-wood: #6B4423;
+            --light-wood: #A0826D;
+            --dark-wood: #3E2723;
+            --warm-cream: #FAF7F2;
+            --soft-beige: #E8DFD0;
+            --accent-gold: #C9A961;
+            --text-dark: #2C2416;
+            --text-light: #FFFFFF;
+            --gray-100: #F5F5F5;
+            --gray-200: #E0E0E0;
+            --gray-600: #757575;
+            --success: #2E7D32;
+            --warning: #ED6C02;
+            --error: #D32F2F;
+            --info: #1976D2;
+            --shadow-sm: 0 2px 8px rgba(107, 68, 35, 0.08);
+            --shadow-md: 0 4px 16px rgba(107, 68, 35, 0.12);
+            --shadow-lg: 0 8px 24px rgba(107, 68, 35, 0.16);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--warm-cream);
+            color: var(--text-dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--dark-wood) 0%, var(--primary-wood) 100%);
+            box-shadow: var(--shadow-lg);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--text-light);
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--accent-gold);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--dark-wood);
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .logo-subtitle {
+            font-size: 0.7rem;
+            opacity: 0.85;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 0;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 1.5rem 1.25rem;
+            transition: var(--transition);
+            position: relative;
+            font-size: 0.95rem;
+        }
+
+        .nav-links a::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 3px;
+            background: var(--accent-gold);
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover::before,
+        .nav-links a.active::before {
+            width: 80%;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.65rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: var(--transition);
+            box-shadow: var(--shadow-sm);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background: var(--accent-gold);
+            color: var(--dark-wood);
+        }
+
+        .btn-primary:hover {
+            background: #B8954E;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-light);
+            border: 2px solid var(--text-light);
+            box-shadow: none;
+        }
+
+        .btn-secondary:hover {
+            background: var(--text-light);
+            color: var(--primary-wood);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #1B5E20;
+            transform: translateY(-2px);
+        }
+
+        /* Hero */
+        .hero {
+            background: linear-gradient(135deg, var(--dark-wood) 0%, var(--primary-wood) 50%, var(--light-wood) 100%);
+            padding: 5rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 50%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 10px,
+                rgba(255, 255, 255, 0.03) 10px,
+                rgba(255, 255, 255, 0.03) 20px
+            );
+        }
+
+        .hero-content {
+            max-width: 1440px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: var(--text-light);
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: rgba(255, 255, 255, 0.9);
+            max-width: 650px;
+            margin-bottom: 2.5rem;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        /* Stats Dashboard */
+        .stats-dashboard {
+            max-width: 1440px;
+            margin: -3rem auto 3rem;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow-md);
+            transition: var(--transition);
+            border-left: 4px solid var(--accent-gold);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--primary-wood), var(--light-wood));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-align: center;
+            line-height: 1.2;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--dark-wood);
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--gray-600);
+            margin-top: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-trend {
+            font-size: 0.85rem;
+            margin-top: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .trend-up { color: var(--success); }
+        .trend-down { color: var(--error); }
+
+        /* Main Content */
+        main {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .section {
+            margin-bottom: 4rem;
+        }
+
+        .section-header {
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--dark-wood);
+            margin-bottom: 0.5rem;
+        }
+
+        .section-subtitle {
+            font-size: 1rem;
+            color: var(--gray-600);
+        }
+
+        /* Feature Grid */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+            border: 1px solid var(--gray-200);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--accent-gold);
+        }
+
+        .feature-icon {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, var(--soft-beige), var(--warm-cream));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--primary-wood);
+            text-align: center;
+            line-height: 1.2;
+        }
+
+        .feature-card h3 {
+            font-size: 1.35rem;
+            font-weight: 600;
+            color: var(--dark-wood);
+            margin-bottom: 0.75rem;
+        }
+
+        .feature-card p {
+            color: var(--gray-600);
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Booking Panel */
+        .booking-panel {
+            background: white;
+            border-radius: 12px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--gray-200);
+        }
+
+        .booking-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            color: var(--dark-wood);
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 0.85rem 1rem;
+            border: 2px solid var(--gray-200);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: var(--transition);
+            background: var(--gray-100);
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary-wood);
+            background: white;
+            box-shadow: 0 0 0 3px rgba(107, 68, 35, 0.1);
+        }
+
+        .form-group-full {
+            grid-column: 1 / -1;
+        }
+
+        /* Rooms Grid */
+        .rooms-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 2rem;
+        }
+
+        .room-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+            border: 1px solid var(--gray-200);
+        }
+
+        .room-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--accent-gold);
+        }
+
+        .room-image {
+            height: 220px;
+            background: linear-gradient(135deg, var(--soft-beige) 0%, var(--light-wood) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            font-size: 3rem;
+            color: white;
+            font-weight: 700;
+        }
+
+        .room-type-badge {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background: rgba(255, 255, 255, 0.95);
+            color: var(--dark-wood);
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .room-details {
+            padding: 1.75rem;
+        }
+
+        .room-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .room-name {
+            font-size: 1.35rem;
+            font-weight: 600;
+            color: var(--dark-wood);
+        }
+
+        .room-price {
+            text-align: right;
+        }
+
+        .price-amount {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--accent-gold);
+            display: block;
+        }
+
+        .price-period {
+            font-size: 0.85rem;
+            color: var(--gray-600);
+        }
+
+        .room-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .feature-tag {
+            background: var(--soft-beige);
+            color: var(--dark-wood);
+            padding: 0.4rem 0.9rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .room-availability {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1.25rem;
+            padding: 0.75rem;
+            background: var(--gray-100);
+            border-radius: 8px;
+        }
+
+        .availability-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .availability-text {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--gray-600);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 16px;
+            max-width: 800px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .modal-header {
+            padding: 2rem 2rem 1rem;
+            border-bottom: 1px solid var(--gray-200);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--dark-wood);
+        }
+
+        .close-modal {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: none;
+            background: var(--gray-100);
+            color: var(--dark-wood);
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-modal:hover {
+            background: var(--gray-200);
+            transform: rotate(90deg);
+        }
+
+        .modal-body {
+            padding: 2rem;
+        }
+
+        /* Tables */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .data-table thead {
+            background: linear-gradient(135deg, var(--dark-wood), var(--primary-wood));
+            color: white;
+        }
+
+        .data-table th {
+            padding: 1rem 1.5rem;
+            text-align: left;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+        }
+
+        .data-table td {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .data-table tbody tr:hover {
+            background: var(--gray-100);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.35rem 0.85rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-available { background: #E8F5E9; color: var(--success); }
+        .status-occupied { background: #FFF3E0; color: var(--warning); }
+        .status-cleaning { background: #E3F2FD; color: var(--info); }
+        .status-maintenance { background: #FFEBEE; color: var(--error); }
+        .status-dirty { background: #FFF3E0; color: var(--warning); }
+        .status-clean { background: #E8F5E9; color: var(--success); }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 5rem;
+            right: 2rem;
+            background: white;
+            padding: 1.25rem 1.5rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow-lg);
+            border-left: 4px solid var(--success);
+            max-width: 400px;
+            z-index: 3000;
+            display: none;
+        }
+
+        .notification.active {
+            display: block;
+            animation: slideInRight 0.4s ease-out;
+        }
+
+        @keyframes slideInRight {
+            from { transform: translateX(400px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .notification.error {
+            border-left-color: var(--error);
+        }
+
+        .notification-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .notification-title {
+            font-weight: 600;
+            color: var(--dark-wood);
+        }
+
+        .notification-close {
+            background: none;
+            border: none;
+            font-size: 1.25rem;
+            cursor: pointer;
+            color: var(--gray-600);
+            padding: 0;
+            width: 24px;
+            height: 24px;
+        }
+
+        .notification-message {
+            color: var(--gray-600);
+            font-size: 0.95rem;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            border-bottom: 2px solid var(--gray-200);
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            padding: 1rem 1.5rem;
+            background: none;
+            border: none;
+            color: var(--gray-600);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            font-size: 0.95rem;
+            font-family: inherit;
+        }
+
+        .tab.active {
+            color: var(--primary-wood);
+        }
+
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--primary-wood);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Loading */
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(107, 68, 35, 0.2);
+            border-radius: 50%;
+            border-top-color: var(--primary-wood);
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Search Bar */
+        .search-bar {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 0.85rem 1rem;
+            border: 2px solid var(--gray-200);
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary-wood);
+        }
+
+        /* Filters */
+        .filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.65rem 1.25rem;
+            border: 2px solid var(--gray-200);
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+            font-family: inherit;
+        }
+
+        .filter-btn.active {
+            border-color: var(--primary-wood);
+            background: var(--soft-beige);
+            color: var(--dark-wood);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .hero h1 { font-size: 2.5rem; }
+            .hero p { font-size: 1.1rem; }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .hero { padding: 3rem 1.5rem; }
+            .hero h1 { font-size: 2rem; }
+            .stats-dashboard { margin-top: 1rem; }
+            main { padding: 2rem 1rem; }
+            .booking-form { grid-template-columns: 1fr; }
+            .rooms-grid { grid-template-columns: 1fr; }
+            .feature-grid { grid-template-columns: 1fr; }
+        }
+
+        /* Accessibility */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border-width: 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav>
+            <a href="#" class="logo">
+                <div class="logo-icon">HMS</div>
+                <div class="logo-text">
+                    <span class="logo-title">Hotel Management</span>
+                    <span class="logo-subtitle">Enterprise System</span>
+                </div>
+            </a>
+            <ul class="nav-links">
+                <li><a href="#home" class="active">Dashboard</a></li>
+                <li><a href="#booking">Reservations</a></li>
+                <li><a href="#rooms">Rooms</a></li>
+                <li><a href="#guests">Guests</a></li>
+                <li><a href="#housekeeping">Housekeeping</a></li>
+                <li><a href="#reports">Reports</a></li>
+            </ul>
+            <div class="user-menu">
+                <button class="btn btn-secondary" onclick="toggleLanguage()">EN / AR</button>
+                <button class="btn btn-secondary" onclick="showModal('login')">Sign In</button>
+                <button class="btn btn-primary" onclick="showModal('register')">Get Started</button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>Enterprise Hotel Management Platform</h1>
+            <p>Complete operational control with real-time booking, intelligent housekeeping management, comprehensive analytics, and seamless payment processing. Built for efficiency and guest satisfaction.</p>
+            <div class="hero-actions">
+                <button class="btn btn-primary" onclick="scrollToSection('booking')" style="font-size: 1rem; padding: 0.85rem 2rem;">Make Reservation</button>
+                <button class="btn btn-secondary" onclick="showModal('demo')" style="font-size: 1rem; padding: 0.85rem 2rem;">Schedule Demo</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Dashboard -->
+    <section class="stats-dashboard">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div>
+                        <div class="stat-value" id="occupancy-rate">87.4%</div>
+                        <div class="stat-label">Occupancy Rate</div>
+                    </div>
+                    <div class="stat-icon">OCC</div>
+                </div>
+                <div class="stat-trend trend-up">↑ 5.2% from last month</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div>
+                        <div class="stat-value" id="available-rooms">42</div>
+                        <div class="stat-label">Available Rooms</div>
+                    </div>
+                    <div class="stat-icon">ROOMS</div>
+                </div>
+                <div class="stat-trend">328 Total Rooms</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div>
+                        <div class="stat-value" id="adr">$152</div>
+                        <div class="stat-label">ADR Today</div>
+                    </div>
+                    <div class="stat-icon">ADR</div>
+                </div>
+                <div class="stat-trend trend-up">↑ $8 from yesterday</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div>
+                        <div class="stat-value" id="revpar">$133</div>
+                        <div class="stat-label">RevPAR</div>
+                    </div>
+                    <div class="stat-icon">REV</div>
+                </div>
+                <div class="stat-trend trend-up">↑ 12.3% MTD</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Features Section -->
+        <section class="section">
+            <div class="section-header">
+                <h2 class="section-title">Comprehensive Management Suite</h2>
+                <p class="section-subtitle">All the tools you need to run a successful hotel operation</p>
+            </div>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">BOOK</div>
+                    <h3>Reservation Management</h3>
+                    <p>Real-time booking system with dynamic pricing, multi-room selection, promotional codes, and instant confirmation. Prevent overbooking with intelligent inventory control.</p>
+                    <button class="btn btn-primary" onclick="scrollToSection('booking')">Start Booking</button>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">CHECK</div>
+                    <h3>Check-In & Check-Out</h3>
+                    <p>Efficient guest arrival and departure management with ID verification, digital signatures, automated room assignment, and express checkout capabilities.</p>
+                    <button class="btn btn-primary" onclick="showModal('checkin')">Manage Check-In</button>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">CLEAN</div>
+                    <h3>Housekeeping Operations</h3>
+                    <p>Real-time room status tracking, automated task assignment, maintenance reporting, and mobile updates for housekeeping staff with performance metrics.</p>
+                    <button class="btn btn-primary" onclick="showModal('housekeeping')">View Tasks</button>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">PAY</div>
+                    <h3>Billing & Payments</h3>
+                    <p>Automated folio generation, multiple payment methods, PCI-DSS compliant processing, split billing, and tax-compliant invoice generation.</p>
+                    <button class="btn btn-primary" onclick="showModal('billing')">Manage Billing</button>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">GUEST</div>
+                    <h3>Guest Management</h3>
+                    <p>Complete guest profiles with stay history, preferences tracking, loyalty programs, and personalized service management for enhanced satisfaction.</p>
+                    <button class="btn btn-primary" onclick="showModal('guests')">View Guests</button>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">REPORT</div>
+                    <h3>Reports & Analytics</h3>
+                    <p>Comprehensive insights with occupancy reports, revenue analysis, performance metrics, and customizable dashboards. Export to PDF, Excel, or CSV.</p>
+                    <button class="btn btn-primary" onclick="showModal('reports')">Generate Reports</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Booking Section -->
+        <section class="section" id="booking">
+            <div class="section-header">
+                <h2 class="section-title">Room Reservations</h2>
+                <p class="section-subtitle">Search and book available rooms with real-time availability</p>
+            </div>
+            <div class="booking-panel">
+                <form class="booking-form" onsubmit="searchRooms(event)">
+                    <div class="form-group">
+                        <label for="checkin">Check-In Date</label>
+                        <input type="date" id="checkin" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="checkout">Check-Out Date</label>
+                        <input type="date" id="checkout" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="room-type">Room Type</label>
+                        <select id="room-type">
+                            <option value="">All Types</option>
+                            <option value="single">Single Room</option>
+                            <option value="double">Double Room</option>
+                            <option value="suite">Suite</option>
+                            <option value="deluxe">Deluxe Room</option>
+                            <option value="executive">Executive Suite</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="guests">Number of Guests</label>
+                        <input type="number" id="guests" min="1" max="6" value="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="promo">Promotional Code</label>
+                        <input type="text" id="promo" placeholder="Optional">
+                    </div>
+                    <div class="form-group form-group-full">
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">Search Available Rooms</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- Available Rooms -->
+        <section class="section" id="rooms">
+            <div class="section-header">
+                <h2 class="section-title">Available Rooms</h2>
+                <p class="section-subtitle">Select from our range of comfortable accommodations</p>
+            </div>
+            
+            <div class="filters">
+                <button class="filter-btn active" onclick="filterRooms('all')">All Rooms</button>
+                <button class="filter-btn" onclick="filterRooms('available')">Available</button>
+                <button class="filter-btn" onclick="filterRooms('occupied')">Occupied</button>
+                <button class="filter-btn" onclick="filterRooms('cleaning')">Cleaning</button>
+            </div>
+
+            <div class="rooms-grid" id="rooms-grid">
+                <!-- Rooms loaded by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Housekeeping Section -->
+        <section class="section" id="housekeeping">
+            <div class="section-header">
+                <h2 class="section-title">Housekeeping Operations</h2>
+                <p class="section-subtitle">Real-time room status and task management</p>
+            </div>
+
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab('room-status')">Room Status</button>
+                <button class="tab" onclick="switchTab('tasks')">Cleaning Tasks</button>
+                <button class="tab" onclick="switchTab('maintenance')">Maintenance</button>
+            </div>
+
+            <div id="room-status" class="tab-content active">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Room Number</th>
+                            <th>Type</th>
+                            <th>Status</th>
+                            <th>Last Cleaned</th>
+                            <th>Assigned To</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="room-status-table">
+                        <!-- Populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div id="tasks" class="tab-content">
+                <div class="booking-panel">
+                    <h3 style="margin-bottom: 1rem; color: var(--dark-wood);">Today's Cleaning Schedule</h3>
+                    <div id="tasks-list">
+                        <!-- Populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+
+            <div id="maintenance" class="tab-content">
+                <div class="booking-panel">
+                    <h3 style="margin-bottom: 1rem; color: var(--dark-wood);">Maintenance Requests</h3>
+                    <button class="btn btn-primary" onclick="showModal('new-maintenance')" style="margin-bottom: 1.5rem;">Report New Issue</button>
+                    <div id="maintenance-list">
+                        <!-- Populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Guests Section -->
+        <section class="section" id="guests">
+            <div class="section-header">
+                <h2 class="section-title">Guest Management</h2>
+                <p class="section-subtitle">Manage guest profiles and booking history</p>
+            </div>
+
+            <div class="search-bar">
+                <input type="text" class="search-input" placeholder="Search by name, email, phone, or confirmation number..." id="guest-search">
+                <button class="btn btn-primary" onclick="searchGuests()">Search</button>
+            </div>
+
+            <div class="booking-panel">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Guest Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Room</th>
+                            <th>Check-In</th>
+                            <th>Check-Out</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="guests-table">
+                        <!-- Populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Reports Section -->
+        <section class="section" id="reports">
+            <div class="section-header">
+                <h2 class="section-title">Reports & Analytics</h2>
+                <p class="section-subtitle">Comprehensive insights into hotel performance</p>
+            </div>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">OCC</div>
+                    <h3>Occupancy Report</h3>
+                    <p>Daily, weekly, and monthly occupancy rates with historical trends and forecasting.</p>
+                    <button class="btn btn-success" onclick="generateReport('occupancy')">Generate Report</button>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">REV</div>
+                    <h3>Revenue Analysis</h3>
+                    <p>Detailed breakdown of revenue by room type, services, and booking channels.</p>
+                    <button class="btn btn-success" onclick="generateReport('revenue')">Generate Report</button>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">PERF</div>
+                    <h3>Performance Metrics</h3>
+                    <p>ADR, RevPAR, and other key performance indicators with comparative analysis.</p>
+                    <button class="btn btn-success" onclick="generateReport('performance')">Generate Report</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Notification -->
+    <div class="notification" id="notification">
+        <div class="notification-header">
+            <span class="notification-title" id="notification-title">Success</span>
+            <button class="notification-close" onclick="closeNotification()">×</button>
+        </div>
+        <div class="notification-message" id="notification-message"></div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modal-title">Modal Title</h2>
+                <button class="close-modal" onclick="closeModal()">×</button>
+            </div>
+            <div class="modal-body" id="modal-body">
+                <!-- Dynamic content -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize application
+        document.addEventListener('DOMContentLoaded', function() {
+            setMinDates();
+            loadRooms();
+            loadRoomStatus();
+            loadGuests();
+            updateStats();
+            setInterval(updateStats, 30000); // Update every 30 seconds
+        });
+
+        // Set minimum dates for booking
+        function setMinDates() {
+            const today = new Date().toISOString().split('T')[0];
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            
+            document.getElementById('checkin').min = today;
+            document.getElementById('checkin').value = today;
+            document.getElementById('checkout').min = tomorrow.toISOString().split('T')[0];
+            document.getElementById('checkout').value = tomorrow.toISOString().split('T')[0];
+        }
+
+        // Sample room data
+        const rooms = [
+            { number: '101', type: 'Single Room', price: 120, features: ['King Bed', 'WiFi', 'TV', 'Mini Bar'], status: 'available', capacity: 2 },
+            { number: '102', type: 'Single Room', price: 120, features: ['King Bed', 'WiFi', 'TV', 'Mini Bar'], status: 'occupied', capacity: 2 },
+            { number: '201', type: 'Double Room', price: 180, features: ['2 Queen Beds', 'WiFi', 'TV', 'Balcony'], status: 'available', capacity: 4 },
+            { number: '202', type: 'Double Room', price: 180, features: ['2 Queen Beds', 'WiFi', 'TV', 'Balcony'], status: 'cleaning', capacity: 4 },
+            { number: '301', type: 'Executive Suite', price: 320, features: ['King Bed', 'Living Room', 'Kitchenette', 'City View'], status: 'available', capacity: 3 },
+            { number: '302', type: 'Executive Suite', price: 320, features: ['King Bed', 'Living Room', 'Kitchenette', 'City View'], status: 'occupied', capacity: 3 },
+            { number: '401', type: 'Deluxe Suite', price: 450, features: ['Master Bedroom', 'Jacuzzi', 'Bar', 'Terrace'], status: 'available', capacity: 4 },
+            { number: '501', type: 'Presidential Suite', price: 850, features: ['3 Bedrooms', 'Private Pool', 'Butler Service', 'Panoramic View'], status: 'available', capacity: 6 }
+        ];
+
+        // Load rooms
+        function loadRooms() {
+            const grid = document.getElementById('rooms-grid');
+            grid.innerHTML = '';
+
+            rooms.forEach(room => {
+                const available = room.status === 'available';
+                const card = document.createElement('div');
+                card.className = 'room-card';
+                card.innerHTML = `
+                    <div class="room-image">
+                        <span class="room-type-badge">${room.type}</span>
+                        ${room.number}
+                    </div>
+                    <div class="room-details">
+                        <div class="room-header">
+                            <div>
+                                <div class="room-name">Room ${room.number}</div>
+                            </div>
+                            <div class="room-price">
+                                <span class="price-amount">${room.price}</span>
+                                <span class="price-period">per night</span>
+                            </div>
+                        </div>
+                        <div class="room-features">
+                            ${room.features.map(f => `<span class="feature-tag">${f}</span>`).join('')}
+                        </div>
+                        <div class="room-availability">
+                            <span class="availability-indicator" style="background: ${available ? 'var(--success)' : 'var(--warning)'}"></span>
+                            <span class="availability-text">${available ? 'Available' : room.status.charAt(0).toUpperCase() + room.status.slice(1)}</span>
+                        </div>
+                        <button class="btn ${available ? 'btn-primary' : 'btn-secondary'}" 
+                                onclick="${available ? `bookRoom('${room.number}', '${room.type}', ${room.price})` : 'return false'}"
+                                ${!available ? 'disabled style="opacity: 0.6; cursor: not-allowed;"' : ''}>
+                            ${available ? 'Book Now' : 'Not Available'}
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Load room status table
+        function loadRoomStatus() {
+            const tbody = document.getElementById('room-status-table');
+            tbody.innerHTML = '';
+
+            const statusData = [
+                { room: '101', type: 'Single', status: 'clean', lastCleaned: '2 hours ago', staff: 'Maria Garcia' },
+                { room: '102', type: 'Single', status: 'occupied', lastCleaned: 'Yesterday', staff: 'John Smith' },
+                { room: '201', type: 'Double', status: 'clean', lastCleaned: '1 hour ago', staff: 'Maria Garcia' },
+                { room: '202', type: 'Double', status: 'cleaning', lastCleaned: 'In progress', staff: 'Sarah Johnson' },
+                { room: '301', type: 'Suite', status: 'clean', lastCleaned: '3 hours ago', staff: 'John Smith' },
+                { room: '302', type: 'Suite', status: 'occupied', lastCleaned: 'Today', staff: 'Maria Garcia' },
+                { room: '401', type: 'Deluxe', status: 'clean', lastCleaned: '1 hour ago', staff: 'Sarah Johnson' },
+                { room: '501', type: 'Presidential', status: 'dirty', lastCleaned: 'Pending', staff: 'Unassigned' }
+            ];
+
+            statusData.forEach(room => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><strong>${room.room}</strong></td>
+                    <td>${room.type}</td>
+                    <td><span class="status-badge status-${room.status}">${room.status}</span></td>
+                    <td>${room.lastCleaned}</td>
+                    <td>${room.staff}</td>
+                    <td>
+                        <button class="btn btn-primary" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;" onclick="updateRoomStatus('${room.room}')">Update</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Load guests table
+        function loadGuests() {
+            const tbody = document.getElementById('guests-table');
+            tbody.innerHTML = '';
+
+            const guestsData = [
+                { name: 'John Anderson', email: 'john.a@email.com', phone: '+1-555-0123', room: '102', checkin: '2024-12-15', checkout: '2024-12-18', status: 'checked-in' },
+                { name: 'Sarah Williams', email: 'sarah.w@email.com', phone: '+1-555-0124', room: '302', checkin: '2024-12-16', checkout: '2024-12-20', status: 'checked-in' },
+                { name: 'Michael Brown', email: 'michael.b@email.com', phone: '+1-555-0125', room: '201', checkin: '2024-12-17', checkout: '2024-12-19', status: 'confirmed' },
+                { name: 'Emily Davis', email: 'emily.d@email.com', phone: '+1-555-0126', room: '401', checkin: '2024-12-18', checkout: '2024-12-22', status: 'confirmed' }
+            ];
+
+            guestsData.forEach(guest => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><strong>${guest.name}</strong></td>
+                    <td>${guest.email}</td>
+                    <td>${guest.phone}</td>
+                    <td>${guest.room}</td>
+                    <td>${guest.checkin}</td>
+                    <td>${guest.checkout}</td>
+                    <td><span class="status-badge ${guest.status === 'checked-in' ? 'status-occupied' : 'status-available'}">${guest.status}</span></td>
+                    <td>
+                        <button class="btn btn-primary" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;" onclick="viewGuest('${guest.name}')">View</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Search rooms
+        function searchRooms(event) {
+            event.preventDefault();
+            
+            const checkin = document.getElementById('checkin').value;
+            const checkout = document.getElementById('checkout').value;
+            
+            if (new Date(checkout) <= new Date(checkin)) {
+                showNotification('Error', 'Check-out date must be after check-in date', 'error');
+                return;
+            }
+
+            showNotification('Success', 'Room search completed successfully');
+            scrollToSection('rooms');
+        }
+
+        // Book room
+        function bookRoom(roomNumber, roomType, price) {
+            const modalBody = document.getElementById('modal-body');
+            document.getElementById('modal-title').textContent = 'Complete Booking';
+            
+            modalBody.innerHTML = `
+                <form onsubmit="completeBooking(event, '${roomNumber}', '${roomType}', ${price})">
+                    <div class="booking-form">
+                        <div class="form-group">
+                            <label>Full Name *</label>
+                            <input type="text" required placeholder="John Doe">
+                        </div>
+                        <div class="form-group">
+                            <label>Email Address *</label>
+                            <input type="email" required placeholder="john@example.com">
+                        </div>
+                        <div class="form-group">
+                            <label>Phone Number *</label>
+                            <input type="tel" required placeholder="+1-555-0123">
+                        </div>
+                        <div class="form-group">
+                            <label>ID Number *</label>
+                            <input type="text" required placeholder="Passport or National ID">
+                        </div>
+                        <div class="form-group form-group-full">
+                            <label>Payment Method *</label>
+                            <select required>
+                                <option value="">Select Method</option>
+                                <option value="credit">Credit Card (Stripe)</option>
+                                <option value="paypal">PayPal</option>
+                                <option value="visa">Visa Direct</option>
+                                <option value="cash">Cash on Arrival</option>
+                            </select>
+                        </div>
+                        <div class="form-group form-group-full">
+                            <label>Special Requests</label>
+                            <input type="text" placeholder="Early check-in, high floor, etc.">
+                        </div>
+                        <div class="form-group form-group-full" style="background: var(--gray-100); padding: 1rem; border-radius: 8px; margin-top: 1rem;">
+                            <strong style="display: block; margin-bottom: 0.5rem;">Booking Summary</strong>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem;">
+                                <span>Room ${roomNumber} - ${roomType}</span>
+                                <span>${price}/night</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem;">
+                                <span>Tax (14%)</span>
+                                <span>${(price * 0.14).toFixed(2)}</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-top: 0.5rem; padding-top: 0.5rem; border-top: 2px solid var(--gray-200); font-weight: 700; font-size: 1.1rem;">
+                                <span>Total</span>
+                                <span style="color: var(--accent-gold);">${(price * 1.14).toFixed(2)}</span>
+                            </div>
+                        </div>
+                        <div class="form-group form-group-full">
+                            <button type="submit" class="btn btn-primary" style="width: 100%; padding: 1rem;">
+                                Confirm Booking
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            `;
+            
+            showModal();
+        }
+
+        // Complete booking
+        function completeBooking(event, roomNumber, roomType, price) {
+            event.preventDefault();
+            
+            const confirmationNumber = 'HMS' + Math.random().toString(36).substr(2, 9).toUpperCase();
+            
+            closeModal();
+            showNotification('Success', `Booking confirmed! Confirmation number: ${confirmationNumber}`);
+            
+            // Update room status
+            const room = rooms.find(r => r.number === roomNumber);
+            if (room) room.status = 'occupied';
+            loadRooms();
+        }
+
+        // Filter rooms
+        function filterRooms(filter) {
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            const grid = document.getElementById('rooms-grid');
+            const cards = grid.querySelectorAll('.room-card');
+            
+            cards.forEach(card => {
+                const statusText = card.querySelector('.availability-text').textContent.toLowerCase();
+                
+                if (filter === 'all') {
+                    card.style.display = 'block';
+                } else if (filter === 'available' && statusText === 'available') {
+                    card.style.display = 'block';
+                } else if (filter === 'occupied' && statusText === 'occupied') {
+                    card.style.display = 'block';
+                } else if (filter === 'cleaning' && statusText === 'cleaning') {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Switch tabs
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+        }
+
+        // Update room status
+        function updateRoomStatus(roomNumber) {
+            document.getElementById('modal-title').textContent = 'Update Room Status';
+            const modalBody = document.getElementById('modal-body');
+            
+            modalBody.innerHTML = `
+                <form onsubmit="saveRoomStatus(event, '${roomNumber}')">
+                    <div class="booking-form">
+                        <div class="form-group form-group-full">
+                            <label>New Status *</label>
+                            <select required id="new-status">
+                                <option value="">Select Status</option>
+                                <option value="clean">Vacant Clean</option>
+                                <option value="dirty">Vacant Dirty</option>
+                                <option value="cleaning">Cleaning in Progress</option>
+                                <option value="occupied">Occupied</option>
+                                <option value="maintenance">Out of Order</option>
+                            </select>
+                        </div>
+                        <div class="form-group form-group-full">
+                            <label>Notes</label>
+                            <input type="text" placeholder="Additional information">
+                        </div>
+                        <div class="form-group form-group-full">
+                            <button type="submit" class="btn btn-primary" style="width: 100%;">Update Status</button>
+                        </div>
+                    </div>
+                </form>
+            `;
+            
+            showModal();
+        }
+
+        // Save room status
+        function saveRoomStatus(event, roomNumber) {
+            event.preventDefault();
+            closeModal();
+            showNotification('Success', `Room ${roomNumber} status updated successfully`);
+            loadRoomStatus();
+        }
+
+        // Generate report
+        function generateReport(reportType) {
+            showNotification('Success', `${reportType.charAt(0).toUpperCase() + reportType.slice(1)} report generated successfully. Download will begin shortly.`);
+        }
+
+        // Show modal
+        function showModal(type) {
+            if (type === 'login') {
+                document.getElementById('modal-title').textContent = 'Sign In';
+                document.getElementById('modal-body').innerHTML = `
+                    <form onsubmit="handleLogin(event)">
+                        <div class="booking-form">
+                            <div class="form-group form-group-full">
+                                <label>Email Address *</label>
+                                <input type="email" required placeholder="your@email.com">
+                            </div>
+                            <div class="form-group form-group-full">
+                                <label>Password *</label>
+                                <input type="password" required placeholder="Enter password">
+                            </div>
+                            <div class="form-group form-group-full">
+                                <button type="submit" class="btn btn-primary" style="width: 100%;">Sign In</button>
+                            </div>
+                            <div class="form-group form-group-full" style="text-align: center;">
+                                <a href="#" style="color: var(--primary-wood);">Forgot password?</a>
+                            </div>
+                        </div>
+                    </form>
+                `;
+            } else if (type === 'register') {
+                document.getElementById('modal-title').textContent = 'Create Account';
+                document.getElementById('modal-body').innerHTML = `
+                    <form onsubmit="handleRegister(event)">
+                        <div class="booking-form">
+                            <div class="form-group">
+                                <label>First Name *</label>
+                                <input type="text" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Last Name *</label>
+                                <input type="text" required>
+                            </div>
+                            <div class="form-group form-group-full">
+                                <label>Email Address *</label>
+                                <input type="email" required>
+                            </div>
+                            <div class="form-group form-group-full">
+                                <label>Phone Number *</label>
+                                <input type="tel" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Password *</label>
+                                <input type="password" required minlength="8">
+                            </div>
+                            <div class="form-group">
+                                <label>Confirm Password *</label>
+                                <input type="password" required minlength="8">
+                            </div>
+                            <div class="form-group form-group-full">
+                                <button type="submit" class="btn btn-primary" style="width: 100%;">Create Account</button>
+                            </div>
+                        </div>
+                    </form>
+                `;
+            }
+            
+            document.getElementById('modal').classList.add('active');
+        }
+
+        // Close modal
+        function closeModal() {
+            document.getElementById('modal').classList.remove('active');
+        }
+
+        // Handle login
+        function handleLogin(event) {
+            event.preventDefault();
+            closeModal();
+            showNotification('Success', 'Login successful! Welcome back.');
+        }
+
+        // Handle register
+        function handleRegister(event) {
+            event.preventDefault();
+            closeModal();
+            showNotification('Success', 'Account created successfully! Please check your email for verification.');
+        }
+
+        // Show notification - FIXED
+        function showNotification(title, message, type = 'success') {
+            const notification = document.getElementById('notification');
+            document.getElementById('notification-title').textContent = title;
+            document.getElementById('notification-message').textContent = message;
+            
+            notification.className = 'notification active';
+            if (type === 'error') {
+                notification.classList.add('error');
+            }
+            
+            setTimeout(() => {
+                notification.classList.remove('active');
+            }, 5000);
+        }
+
+        // Close notification
+        function closeNotification() {
+            document.getElementById('notification').classList.remove('active');
+        }
+
+        // Scroll to section
+        function scrollToSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            if (section) {
+                section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        // Search guests
+        function searchGuests() {
+            const searchTerm = document.getElementById('guest-search').value.toLowerCase();
+            const rows = document.querySelectorAll('#guests-table tr');
+            
+            let found = false;
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                if (text.includes(searchTerm)) {
+                    row.style.display = '';
+                    found = true;
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+
+            if (!found && searchTerm) {
+                showNotification('No Results', 'No guests found matching your search criteria', 'error');
+            }
+        }
+
+        // View guest details
+        function viewGuest(guestName) {
+            document.getElementById('modal-title').textContent = 'Guest Profile';
+            const modalBody = document.getElementById('modal-body');
+            
+            modalBody.innerHTML = `
+                <div style="padding: 1rem;">
+                    <h3 style="color: var(--dark-wood); margin-bottom: 1.5rem;">${guestName}</h3>
+                    
+                    <div style="display: grid; gap: 1.5rem;">
+                        <div>
+                            <strong style="display: block; margin-bottom: 0.5rem; color: var(--dark-wood);">Contact Information</strong>
+                            <p style="color: var(--gray-600); margin: 0.25rem 0;">Email: ${guestName.toLowerCase().replace(' ', '.')}@email.com</p>
+                            <p style="color: var(--gray-600); margin: 0.25rem 0;">Phone: +1-555-0123</p>
+                        </div>
+                        
+                        <div>
+                            <strong style="display: block; margin-bottom: 0.5rem; color: var(--dark-wood);">Current Stay</strong>
+                            <p style="color: var(--gray-600); margin: 0.25rem 0;">Room: 102</p>
+                            <p style="color: var(--gray-600); margin: 0.25rem 0;">Check-in: Dec 15, 2024</p>
+                            <p style="color: var(--gray-600); margin: 0.25rem 0;">Check-out: Dec 18, 2024</p>
+                        </div>
+                        
+                        <div>
+                            <strong style="display: block; margin-bottom: 0.5rem; color: var(--dark-wood);">Stay History</strong>
+                            <p style="color: var(--gray-600); margin: 0.25rem 0;">Total Stays: 5</p>
+                            <p style="color: var(--gray-600); margin: 0.25rem 0;">Total Spent: $2,450</p>
+                            <p style="color: var(--gray-600); margin: 0.25rem 0;">Loyalty Points: 1,250</p>
+                        </div>
+                        
+                        <div>
+                            <strong style="display: block; margin-bottom: 0.5rem; color: var(--dark-wood);">Preferences</strong>
+                            <p style="color: var(--gray-600); margin: 0.25rem 0;">Room Type: Non-smoking</p>
+                            <p style="color: var(--gray-600); margin: 0.25rem 0;">Floor: High floor preferred</p>
+                            <p style="color: var(--gray-600); margin: 0.25rem 0;">Special: Extra pillows</p>
+                        </div>
+                        
+                        <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+                            <button class="btn btn-primary" onclick="closeModal()">Close</button>
+                            <button class="btn btn-success" onclick="sendEmail('${guestName}')">Send Email</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            showModal();
+        }
+
+        // Send email to guest
+        function sendEmail(guestName) {
+            showNotification('Success', `Email sent to ${guestName}`);
+            closeModal();
+        }
+
+        // Update stats (simulate real-time updates)
+        function updateStats() {
+            const occupancyRate = document.getElementById('occupancy-rate');
+            const availableRooms = document.getElementById('available-rooms');
+            const adr = document.getElementById('adr');
+            const revpar = document.getElementById('revpar');
+            
+            if (!occupancyRate || !availableRooms || !adr || !revpar) return;
+            
+            // Simulate small changes
+            const currentOcc = parseFloat(occupancyRate.textContent);
+            const newOcc = (currentOcc + (Math.random() - 0.5) * 0.2).toFixed(1);
+            occupancyRate.textContent = newOcc + '%';
+            
+            const currentRooms = parseInt(availableRooms.textContent);
+            const roomChange = Math.floor(Math.random() * 3) - 1;
+            availableRooms.textContent = Math.max(0, Math.min(328, currentRooms + roomChange));
+            
+            const currentADR = parseInt(adr.textContent.replace('$', ''));
+            const adrChange = Math.floor(Math.random() * 10) - 5;
+            adr.textContent = '$' + (currentADR + adrChange);
+            
+            const currentRevPAR = parseInt(revpar.textContent.replace('$', ''));
+            const revparChange = Math.floor(Math.random() * 8) - 4;
+            revpar.textContent = '$' + (currentRevPAR + revparChange);
+        }
+
+        // Toggle language (placeholder)
+        function toggleLanguage() {
+            showNotification('Language', 'Language switching feature coming soon!');
+        }
+
+        // Close modal on outside click
+        document.addEventListener('DOMContentLoaded', function() {
+            const modal = document.getElementById('modal');
+            if (modal) {
+                modal.addEventListener('click', function(e) {
+                    if (e.target === this) {
+                        closeModal();
+                    }
+                });
+            }
+        });
+
+        // Handle ESC key to close modal
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+                closeNotification();
+            }
+        });
+
+        // Smooth scroll for navigation
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href').substring(1);
+                    scrollToSection(targetId);
+                    
+                    // Update active state
+                    document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+        });
+
+        // Auto-update check-out date when check-in changes
+        document.addEventListener('DOMContentLoaded', function() {
+            const checkinInput = document.getElementById('checkin');
+            if (checkinInput) {
+                checkinInput.addEventListener('change', function() {
+                    const checkinDate = new Date(this.value);
+                    const checkoutDate = new Date(checkinDate);
+                    checkoutDate.setDate(checkoutDate.getDate() + 1);
+                    
+                    const checkoutInput = document.getElementById('checkout');
+                    checkoutInput.min = checkoutDate.toISOString().split('T')[0];
+                    
+                    if (new Date(checkoutInput.value) <= checkinDate) {
+                        checkoutInput.value = checkoutDate.toISOString().split('T')[0];
+                    }
+                });
+            }
+        });
+
+        // Initialize tasks and maintenance on page load
+        setTimeout(() => {
+            loadTasks();
+            loadMaintenance();
+        }, 100);
+
+        // Load cleaning tasks
+        function loadTasks() {
+            const tasksList = document.getElementById('tasks-list');
+            if (!tasksList) return;
+            
+            const tasks = [
+                { room: '202', priority: 'High', time: '10:00 AM', staff: 'Sarah Johnson', type: 'Checkout Clean' },
+                { room: '501', priority: 'High', time: '10:30 AM', staff: 'Unassigned', type: 'Checkout Clean' },
+                { room: '105', priority: 'Medium', time: '2:00 PM', staff: 'Maria Garcia', type: 'Turndown Service' },
+                { room: '308', priority: 'Low', time: '3:00 PM', staff: 'John Smith', type: 'Daily Refresh' }
+            ];
+            
+            tasksList.innerHTML = tasks.map(task => `
+                <div style="padding: 1rem; background: var(--gray-100); border-radius: 8px; margin-bottom: 1rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                        <strong style="color: var(--dark-wood);">Room ${task.room}</strong>
+                        <span class="status-badge ${task.priority === 'High' ? 'status-maintenance' : task.priority === 'Medium' ? 'status-occupied' : 'status-clean'}">${task.priority} Priority</span>
+                    </div>
+                    <p style="color: var(--gray-600); margin: 0.25rem 0;">Type: ${task.type}</p>
+                    <p style="color: var(--gray-600); margin: 0.25rem 0;">Time: ${task.time}</p>
+                    <p style="color: var(--gray-600); margin: 0.25rem 0;">Staff: ${task.staff}</p>
+                    <button class="btn btn-success" style="margin-top: 0.75rem; padding: 0.5rem 1rem; font-size: 0.85rem;" onclick="completeTask('${task.room}')">Mark Complete</button>
+                </div>
+            `).join('');
+        }
+
+        // Load maintenance requests
+        function loadMaintenance() {
+            const maintenanceList = document.getElementById('maintenance-list');
+            if (!maintenanceList) return;
+            
+            const maintenance = [
+                { room: '405', issue: 'AC not cooling', status: 'In Progress', reported: '2 hours ago', technician: 'Mike Wilson' },
+                { room: '212', issue: 'Leaking faucet', status: 'Pending', reported: '1 day ago', technician: 'Unassigned' },
+                { room: '109', issue: 'TV remote not working', status: 'Resolved', reported: '3 days ago', technician: 'Mike Wilson' }
+            ];
+            
+            maintenanceList.innerHTML = maintenance.map(item => `
+                <div style="padding: 1rem; background: var(--gray-100); border-radius: 8px; margin-bottom: 1rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                        <strong style="color: var(--dark-wood);">Room ${item.room}</strong>
+                        <span class="status-badge ${item.status === 'Resolved' ? 'status-clean' : item.status === 'In Progress' ? 'status-occupied' : 'status-maintenance'}">${item.status}</span>
+                    </div>
+                    <p style="color: var(--gray-600); margin: 0.25rem 0;">Issue: ${item.issue}</p>
+                    <p style="color: var(--gray-600); margin: 0.25rem 0;">Reported: ${item.reported}</p>
+                    <p style="color: var(--gray-600); margin: 0.25rem 0;">Technician: ${item.technician}</p>
+                    ${item.status !== 'Resolved' ? `<button class="btn btn-primary" style="margin-top: 0.75rem; padding: 0.5rem 1rem; font-size: 0.85rem;" onclick="updateMaintenance('${item.room}')">Update Status</button>` : ''}
+                </div>
+            `).join('');
+        }
+
+        // Complete task
+        function completeTask(room) {
+            showNotification('Success', `Task for room ${room} marked as complete`);
+            loadTasks();
+        }
+
+        // Update maintenance
+        function updateMaintenance(room) {
+            showNotification('Success', `Maintenance request for room ${room} updated`);
+            loadMaintenance();
+        }
+    </script>
+</body>
+</html>
